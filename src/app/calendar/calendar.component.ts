@@ -12,13 +12,14 @@ export class CalendarComponent implements OnInit {
   private currentMonth = moment().format('MM');
   private currentYear = moment().format('YYYY');
   private monthName: string = moment.months()[Number(this.currentMonth) - 1];
+  private dayName = moment.weekdays();
 
 
   constructor(private calendarDatesService: CalendarDatesService) {
   }
 
   ngOnInit() {
-    this.weeksArr = this.calendarDatesService.createCalendar(this.currentMonth, this.currentYear);
+    this.weeksArr = this.calendarDatesService.calendarWeeks(this.currentMonth, this.currentYear);
   }
 
   changeMonth(changeValue: number) {
@@ -33,7 +34,7 @@ export class CalendarComponent implements OnInit {
     }
     this.currentMonth = '0' + ( monthBufor ).toString();
     this.monthName = moment.months()[Number(this.currentMonth) - 1];
-    this.weeksArr = this.calendarDatesService.createCalendar(this.currentMonth, this.currentYear);
+    this.weeksArr = this.calendarDatesService.calendarWeeks(this.currentMonth, this.currentYear);
   }
 
   changeYear(changeValue: number) {
@@ -41,6 +42,6 @@ export class CalendarComponent implements OnInit {
     if (yearBufor ===  0) { yearBufor = 12; }
     if (yearBufor === 13) { yearBufor = 1; }
     this.currentYear = ( yearBufor ).toString();
-    this.weeksArr = this.calendarDatesService.createCalendar(this.currentMonth, this.currentYear);
+    this.weeksArr = this.calendarDatesService.calendarWeeks(this.currentMonth, this.currentYear);
   }
 }
