@@ -51,6 +51,6 @@
   width: 215px;
 }
 #calendar {
+  min-width: 1500px;
   width: 80%;
-  height: 80px;
 }
