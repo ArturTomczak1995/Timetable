@@ -2,22 +2,28 @@
   <thead>
   <tr>
     <th>Employee</th>
-    <ng-container *ngFor="let day of calednarDaysArr">
-      <th *ngIf="day.isActive">
-
+    <ng-container *ngFor="let day of calednarDaysArr; let dayNameIdx = index">
+      <th *ngIf="day.isActive"  [class]="dayClass === dayNameIdx ? 'highlight' : 'lowlight'">
           {{ day.dayName }} {{ day.i }}
       </th>
     </ng-container>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let employee of employees">
-    {{ employee.name }}
-    <ng-container *ngFor="let day of calednarDaysArr">
-      <th *ngIf="day.isActive">
+  <tr *ngFor="let employee of employees; let empIdx = index" >
+    <th [class]="employeeClass === empIdx ? 'highlight' : 'lowlight'">{{ employee.name }}</th>
+    <ng-container *ngFor="let day of calednarDaysArr; let dayIdx = index">
+      <th class="ss" *ngIf="day.isActive" (mouseover)=" dayClass  = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = Null">
 
       </th>
     </ng-container>
   </tr>
   </tbody>
 </table>
+
+
+<div>
+  <div ngClass="{{ myClass }}">This div will srange class when one hovers over bottom DIV </div>
+  <br/>
+  <div class="hover-div" (mouseover)="myClass = 'highlight'" (mouseleave)="myClass = 'lowlight'">HOVER OVER ME TO CHANGE THE UPPER DIV's CLASS</div>
+</div>

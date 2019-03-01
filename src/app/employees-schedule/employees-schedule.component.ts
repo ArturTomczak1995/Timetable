@@ -23,5 +23,8 @@ export class EmployeesScheduleComponent implements OnInit {
     this.employeesService.getEmployees()
       .subscribe(data => this.employees = data);
   }
+  mouseOverFunc(empIdx, dayIdx) {
+    console.log(empIdx, dayIdx);
+  }
 
 }

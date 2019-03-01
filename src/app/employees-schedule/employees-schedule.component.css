@@ -1,0 +1,15 @@
+.red {
+  background-color: red;
+}
+.highlight {
+  padding: 10px;
+  background: black;
+  color: white;
+}
+
+.lowlight {
+  padding: 10px;
+  background: honeydew;
+  color: white;
+}
+
