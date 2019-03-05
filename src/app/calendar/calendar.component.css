@@ -25,6 +25,7 @@
   vertical-align: middle;
   line-height: 110px;
   font-size: 2em;
+  color: white;
 }
 
 .days-inactive {
@@ -36,6 +37,7 @@
 }
 #days-name:hover {
   background-color: slategrey;
+  color: orange;
 }
 
 .date-button {
@@ -53,4 +55,9 @@
 #calendar {
   min-width: 1500px;
   width: 80%;
+}
+
+.container {
+  margin-left: 10%;
+  margin-right: 10%;
 }

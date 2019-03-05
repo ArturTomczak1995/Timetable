@@ -23,7 +23,7 @@ import { EmployeesService } from './services/employees.service';
   ],
   providers: [
     CalendarDatesService,
-    EmployeesService
+    EmployeesService,
   ],
   bootstrap: [AppComponent]
 })

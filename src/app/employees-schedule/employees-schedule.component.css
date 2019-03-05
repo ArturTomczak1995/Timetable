@@ -3,13 +3,21 @@
 }
 .highlight {
   padding: 10px;
-  background: black;
-  color: white;
+  background: slategrey;
+  color: orange;
 }
 
 .lowlight {
   padding: 10px;
-  background: honeydew;
+  background: gray;
   color: white;
 }
 
+/*.employee-field:hover {*/
+  /*background-color: lightskyblue;*/
+/*}*/
+
+.context-menu {
+  position: absolute;
+  background-color: #d3d2cc;
+}
