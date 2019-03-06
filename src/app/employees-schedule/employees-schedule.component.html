@@ -3,8 +3,8 @@
     <thead>
     <tr>
       <th>Employee</th>
-      <ng-container *ngFor="let day of calednarDaysArr; let dayNameIdx = index">
-        <th *ngIf="day.isActive"  [class]="dayClass === dayNameIdx ? 'highlight' : 'lowlight'">
+      <ng-container *ngFor="let day of calendarDaysArr; let dayNameIdx = index">
+        <th *ngIf="day.isActive"  [classList]="dayClass === dayNameIdx ? 'highlight' : 'low-light'">
             {{ day.dayName }} {{ day.i }}
         </th>
       </ng-container>
@@ -12,20 +12,22 @@
     </thead>
     <tbody>
     <tr *ngFor="let employee of employees; let empIdx = index" >
-      <th [class]="employeeClass === empIdx ? 'highlight' : 'lowlight'">{{ employee.name }}</th>
-      <ng-container *ngFor="let day of calednarDaysArr; let dayIdx = index">
-        <th class="employee-field" *ngIf="day.isActive" (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = Null">
+      <th [classList]="employeeClass === empIdx ? 'highlight' : 'low-light'">{{ employee.name }}</th>
+      <ng-container *ngFor="let day of calendarDaysArr; let dayIdx = index">
+        <th class="employee-field" *ngIf="day.isActive" (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = null" (contextmenu)="onRightClick($event)">
         </th>
       </ng-container>
     </tr>
     </tbody>
   </table>
+</div>
 
-  <ul>
-    <li (contextmenu)="onRightClick($event)">right click me!</li>
-  </ul>
-
-  <div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}">
-    this is your context-menu content
+<div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}">
+  <div class="context-menu-option" (click)="addShift()">
+    Add shift
   </div>
+  <div class="context-menu-option" (click)="addShift()">
+    Add shift 2
+  </div>
+
 </div>

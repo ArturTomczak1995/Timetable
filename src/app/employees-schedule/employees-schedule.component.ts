@@ -9,11 +9,11 @@ import * as moment from 'moment';
   styleUrls: ['./employees-schedule.component.css']
 })
 export class EmployeesScheduleComponent implements OnInit {
-  private calednarDaysArr: any;
+  calendarDaysArr: any;
   private currentMonth = moment().format('MM');
   private currentYear = moment().format('YYYY');
   // private monthName: string = moment.months()[Number(this.currentMonth) - 1];
-  private employees = [];
+  employees = [];
   @Input() x: null;
   @Input() y: null;
   constructor(private calendarDatesService: CalendarDatesService,
@@ -22,6 +22,8 @@ export class EmployeesScheduleComponent implements OnInit {
 
 
   contextMenu = false;
+  employeeClass: number;
+  dayClass: any;
 
   // activates the menu with the coordinates
   onRightClick(event) {
@@ -35,14 +37,15 @@ export class EmployeesScheduleComponent implements OnInit {
     this.contextMenu = false;
   }
 
-
-  ngOnInit() {
-    this.calednarDaysArr = this.calendarDatesService.calendarDays(this.currentMonth, this.currentYear);
-    this.employeesService.getEmployees()
-      .subscribe(data => this.employees = data);
+  addShift() {
+    console.log('added');
+    this.disableContextMenu();
   }
 
 
-
-
+  ngOnInit() {
+    this.calendarDaysArr = this.calendarDatesService.calendarDays(this.currentMonth, this.currentYear);
+    this.employeesService.getEmployees()
+      .subscribe(data => this.employees = data);
+  }
 }

@@ -7,17 +7,27 @@
   color: orange;
 }
 
-.lowlight {
+.low-light {
   padding: 10px;
   background: gray;
   color: white;
 }
 
-/*.employee-field:hover {*/
-  /*background-color: lightskyblue;*/
-/*}*/
+.employee-field:hover {
+  background-color: aliceblue;
+}
 
 .context-menu {
   position: absolute;
   background-color: #d3d2cc;
+  padding: 10px;
+}
+
+.context-menu-option {
+  cursor: pointer;
+  padding: 5px;
+  min-width: 240px;
+}
+.context-menu-option:hover {
+  background-color: white;
 }
