@@ -5,6 +5,7 @@ import * as moment from 'moment';
   providedIn: 'root'
 })
 export class CalendarDatesService {
+
   constructor() { }
 
   private weeksInMonth = 6;
@@ -31,6 +32,7 @@ export class CalendarDatesService {
       }
     }
   }
+
   private createCalendar() {
     const dayName = moment.weekdays();
     const currentMonthDays = moment(this.currentMonth + this.currentYear, 'MMYYYY').daysInMonth();
