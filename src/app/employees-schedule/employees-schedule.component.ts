@@ -12,6 +12,7 @@ export class EmployeesScheduleComponent implements OnInit {
   calendarDaysArr: any;
   private currentMonth = moment().format('MM');
   private currentYear = moment().format('YYYY');
+
   // private monthName: string = moment.months()[Number(this.currentMonth) - 1];
   employees = [];
   @Input() x: null;
@@ -20,26 +21,32 @@ export class EmployeesScheduleComponent implements OnInit {
               private employeesService: EmployeesService) {
   }
 
-
+  selectedField: string;
   contextMenu = false;
   employeeClass: number;
   dayClass: any;
+  showOptions = false;
 
   // activates the menu with the coordinates
-  onRightClick(event) {
-    console.log(event);
+  onRightClick(event, dayIdx, empIdx) {
     this.x = event.clientX;
     this.y = event.clientY;
     this.contextMenu = true;
+    this.selectedField = dayIdx + '-' + empIdx;
   }
   // disables the menu
   disableContextMenu() {
     this.contextMenu = false;
+    this.showOptions = false;
+    this.selectedField = null;
   }
 
   addShift() {
+    console.log(this.showOptions);
     console.log('added');
-    this.disableContextMenu();
+    this.contextMenu = false;
+    this.showOptions = false;
+    this.showOptions = true;
   }
 
 

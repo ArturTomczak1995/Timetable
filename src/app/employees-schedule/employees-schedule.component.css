@@ -7,7 +7,7 @@
   color: orange;
 }
 
-.low-light {
+.lowLight {
   padding: 10px;
   background: gray;
   color: white;
@@ -17,10 +17,17 @@
   background-color: aliceblue;
 }
 
+.selected-field {
+  background-color: lightblue;
+  border: 2px dashed #98cce6;
+  border-spacing: 1px;
+}
+
 .context-menu {
   position: absolute;
   background-color: #d3d2cc;
   padding: 10px;
+  border-radius: 10px;
 }
 
 .context-menu-option {
@@ -30,4 +37,18 @@
 }
 .context-menu-option:hover {
   background-color: white;
+}
+
+.show-options {
+  padding: 10px;
+  position: absolute;
+  border: 1px solid #ccc;
+}
+
+.hide {
+  display: none;
+}
+
+#add-shift-options-time{
+ padding: 10px;
 }

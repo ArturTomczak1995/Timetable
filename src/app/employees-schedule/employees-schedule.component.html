@@ -4,7 +4,7 @@
     <tr>
       <th>Employee</th>
       <ng-container *ngFor="let day of calendarDaysArr; let dayNameIdx = index">
-        <th *ngIf="day.isActive"  [classList]="dayClass === dayNameIdx ? 'highlight' : 'low-light'">
+        <th *ngIf="day.isActive"  [classList]="dayClass === dayNameIdx ? 'highlight' : 'lowLight'">
             {{ day.dayName }} {{ day.i }}
         </th>
       </ng-container>
@@ -12,9 +12,10 @@
     </thead>
     <tbody>
     <tr *ngFor="let employee of employees; let empIdx = index" >
-      <th [classList]="employeeClass === empIdx ? 'highlight' : 'low-light'">{{ employee.name }}</th>
+      <th [classList]="employeeClass === empIdx ? 'highlight' : 'lowLight'">{{ employee.name }}</th>
       <ng-container *ngFor="let day of calendarDaysArr; let dayIdx = index">
-        <th class="employee-field" *ngIf="day.isActive" (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = null" (contextmenu)="onRightClick($event)">
+        <th *ngIf="day.isActive" (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = null"
+            (contextmenu)="onRightClick($event, dayIdx, empIdx)" [classList]="selectedField === dayIdx + '-' + empIdx ? 'selected-field' : 'employee-field'">
         </th>
       </ng-container>
     </tr>
@@ -22,12 +23,23 @@
   </table>
 </div>
 
-<div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}">
+<div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
   <div class="context-menu-option" (click)="addShift()">
     Add shift
   </div>
   <div class="context-menu-option" (click)="addShift()">
     Add shift 2
   </div>
+</div>
 
+
+<div id="add-shift-options" [classList]="showOptions ?  'context-menu': 'hide'" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
+  Work Time
+  <div id="add-shift-options-time">
+    <label for="add-shift-options-time-start">Start </label>
+    <input id="add-shift-options-time-start" type="time">
+    <label for="add-shift-options-time-end">End </label>
+    <input id="add-shift-options-time-end" type="time">
+  </div>
+  <button class="btn btn-outline-success" type="button">Add</button>
 </div>
