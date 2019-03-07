@@ -1,7 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import * as moment from 'moment';
+
 import { CalendarDatesService } from '../services/calendar-dates.service';
 import { EmployeesService } from '../services/employees.service';
-import * as moment from 'moment';
+import { Shifts } from '../shifts';
+import { Leaves } from '../leaves';
 
 @Component({
   selector: 'app-employees-schedule',
@@ -9,44 +12,58 @@ import * as moment from 'moment';
   styleUrls: ['./employees-schedule.component.css']
 })
 export class EmployeesScheduleComponent implements OnInit {
-  calendarDaysArr: any;
   private currentMonth = moment().format('MM');
   private currentYear = moment().format('YYYY');
+  shiftStart = '06:00';
+  shiftEnd = '18:00';
 
-  // private monthName: string = moment.months()[Number(this.currentMonth) - 1];
-  employees = [];
-  @Input() x: null;
-  @Input() y: null;
-  constructor(private calendarDatesService: CalendarDatesService,
-              private employeesService: EmployeesService) {
-  }
-
+  calendarDaysArr: any;
   selectedField: string;
   contextMenu = false;
   employeeClass: number;
-  dayClass: any;
   showOptions = false;
+  employees = [];
+  dayClass: any;
+  leaveOptionsContext = false;
 
-  // activates the menu with the coordinates
+  x: null;
+  y: null;
+
+  constructor(private calendarDatesService: CalendarDatesService,
+              private employeesService: EmployeesService
+              ) {
+  }
+
+  shiftModel = new Shifts(1, '06:00', '18:00', null);
+  leaveModel = new Leaves();
+
   onRightClick(event, dayIdx, empIdx) {
+    const selectedDate = this.calendarDaysArr[dayIdx].i + '-' + this.currentMonth + '-' + this.currentYear;
+    const dateTimestamp = moment(selectedDate, 'DD-MM-YYYY').valueOf();
     this.x = event.clientX;
     this.y = event.clientY;
     this.contextMenu = true;
+    this.shiftModel.id = empIdx;
+    this.shiftModel.date = dateTimestamp;
     this.selectedField = dayIdx + '-' + empIdx;
   }
-  // disables the menu
+
   disableContextMenu() {
     this.contextMenu = false;
     this.showOptions = false;
     this.selectedField = null;
   }
 
-  addShift() {
-    console.log(this.showOptions);
-    console.log('added');
+  showShiftWindow() {
     this.contextMenu = false;
     this.showOptions = false;
     this.showOptions = true;
+  }
+
+  addShift(even) {
+    event.preventDefault();
+    this.disableContextMenu();
+    console.log(even.shiftStart);
   }
 
 

@@ -50,5 +50,9 @@
 }
 
 #add-shift-options-time{
- padding: 10px;
+ position: unset;
+}
+
+#add-shift-options-time-btn {
+  text-align: right;
 }

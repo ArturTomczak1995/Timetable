@@ -24,22 +24,44 @@
 </div>
 
 <div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
-  <div class="context-menu-option" (click)="addShift()">
+  <div class="context-menu-option" (click)="showShiftWindow()" >
     Add shift
   </div>
-  <div class="context-menu-option" (click)="addShift()">
-    Add shift 2
+  <div class="context-menu-option" (click)="showShiftWindow()" (mouseover)="leaveOptionsContext = true">
+    Add leave
+  </div>
+</div>
+
+
+<div class="add-leave-options" *ngIf="leaveOptionsContext" (mouseleave)="leaveOptionsContext = false">
+
+  <div class="context-menu" [ngStyle]="{'left.px': x, 'top.px': y}">
+    <div class="context-menu-option" *ngFor="let leave of leaveModel.leaves">
+      {{ leave }}
+    </div>
   </div>
 </div>
 
 
 <div id="add-shift-options" [classList]="showOptions ?  'context-menu': 'hide'" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
   Work Time
-  <div id="add-shift-options-time">
-    <label for="add-shift-options-time-start">Start </label>
-    <input id="add-shift-options-time-start" type="time">
-    <label for="add-shift-options-time-end">End </label>
-    <input id="add-shift-options-time-end" type="time">
+  <div class="context-menu" id="add-shift-options-time">
+    <form #userForm="ngForm">
+      <div class="form-group">
+        <input type="hidden" name="id" [(ngModel)]="shiftModel.id">
+        <input type="hidden" name="date" [(ngModel)]="shiftModel.date">
+        <label for="add-shift-options-time-start">Start </label>
+        <input class="form-control" id="add-shift-options-time-start" #shiftStart="ngModel" name="shiftStart" type="text" [(ngModel)]="shiftModel.shiftStart"
+                [class.is-invalid]="shiftStart.invalid && shiftStart.touched">
+        <label for="add-shift-options-time-end">End </label>
+        <input class="form-control" id="add-shift-options-time-end" name="shiftEnd" type="text" #shiftEnd="ngModel"
+               [(ngModel)]="shiftModel.shiftEnd" [class.is-invalid]="shiftEnd.invalid && shiftEnd.touched">
+      </div>
+      <div id="add-shift-options-time-btn">
+        <button class="btn btn-outline-success" type="submit" (click)="addShift(userForm.value)">Add</button>
+      </div>
+    </form>
   </div>
-  <button class="btn btn-outline-success" type="button">Add</button>
+
+
 </div>

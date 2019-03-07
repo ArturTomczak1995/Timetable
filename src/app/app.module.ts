@@ -8,6 +8,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { EmployeesScheduleComponent } from './employees-schedule/employees-schedule.component';
 import { CalendarDatesService } from './services/calendar-dates.service';
 import { EmployeesService } from './services/employees.service';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { EmployeesService } from './services/employees.service';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [
     CalendarDatesService,
