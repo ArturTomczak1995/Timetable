@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import * as moment from 'moment';
 
 import { CalendarDatesService } from '../services/calendar-dates.service';
@@ -29,6 +29,10 @@ export class EmployeesScheduleComponent implements OnInit {
   x: null;
   y: null;
 
+  a = false;
+
+  @Input() cmWidth: number;
+
   constructor(private calendarDatesService: CalendarDatesService,
               private employeesService: EmployeesService
               ) {
@@ -40,6 +44,7 @@ export class EmployeesScheduleComponent implements OnInit {
   onRightClick(event, dayIdx, empIdx) {
     const selectedDate = this.calendarDaysArr[dayIdx].i + '-' + this.currentMonth + '-' + this.currentYear;
     const dateTimestamp = moment(selectedDate, 'DD-MM-YYYY').valueOf();
+    this.disableContextMenu();
     this.x = event.clientX;
     this.y = event.clientY;
     this.contextMenu = true;
@@ -52,6 +57,7 @@ export class EmployeesScheduleComponent implements OnInit {
     this.contextMenu = false;
     this.showOptions = false;
     this.selectedField = null;
+    this.leaveOptionsContext = false;
   }
 
   showShiftWindow() {
@@ -64,6 +70,26 @@ export class EmployeesScheduleComponent implements OnInit {
     event.preventDefault();
     this.disableContextMenu();
     console.log(even.shiftStart);
+  }
+
+  addLeave(reason) {
+    console.log(reason);
+    this.disableContextMenu();
+  }
+
+  mouseDown() {
+    this.a = true;
+  }
+
+  async mouseMove(msg) {
+    if (this.a === true && this.selectedField !== msg) {
+      console.log(msg);
+      this.selectedField = msg;
+    }
+  }
+
+  mouseUP() {
+    this.a = false;
   }
 
 

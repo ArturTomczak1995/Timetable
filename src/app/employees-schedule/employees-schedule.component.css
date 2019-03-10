@@ -34,6 +34,7 @@
   cursor: pointer;
   padding: 5px;
   min-width: 240px;
+
 }
 .context-menu-option:hover {
   background-color: white;

@@ -1,4 +1,4 @@
-<div (click)="disableContextMenu()" oncontextmenu="return false;">
+<div (click)="disableContextMenu()" oncontextmenu="return false;" (mouseup)="mouseUP()">
   <table class="table table-bordered">
     <thead>
     <tr>
@@ -15,7 +15,8 @@
       <th [classList]="employeeClass === empIdx ? 'highlight' : 'lowLight'">{{ employee.name }}</th>
       <ng-container *ngFor="let day of calendarDaysArr; let dayIdx = index">
         <th *ngIf="day.isActive" (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = null"
-            (contextmenu)="onRightClick($event, dayIdx, empIdx)" [classList]="selectedField === dayIdx + '-' + empIdx ? 'selected-field' : 'employee-field'">
+            (contextmenu)="onRightClick($event, dayIdx, empIdx)" [classList]="selectedField === dayIdx + '-' + empIdx ? 'selected-field' : 'employee-field'"
+            (mousedown)="mouseDown()" (mousemove)="mouseMove(dayIdx + '-' + empIdx)">
         </th>
       </ng-container>
     </tr>
@@ -23,25 +24,24 @@
   </table>
 </div>
 
-<div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
-  <div class="context-menu-option" (click)="showShiftWindow()" >
+<div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;" #CMI>
+  <div class="context-menu-option" (click)="showShiftWindow()" (mouseover)="leaveOptionsContext = false">
     Add shift
   </div>
-  <div class="context-menu-option" (click)="showShiftWindow()" (mouseover)="leaveOptionsContext = true">
-    Add leave
+  <div class="context-menu-option" (mouseover)="leaveOptionsContext = true" #CM>
+    Add leave <span style="float: right"> > </span>
   </div>
-</div>
+
 
 
 <div class="add-leave-options" *ngIf="leaveOptionsContext" (mouseleave)="leaveOptionsContext = false">
-
-  <div class="context-menu" [ngStyle]="{'left.px': x, 'top.px': y}">
-    <div class="context-menu-option" *ngFor="let leave of leaveModel.leaves">
+  <div class="context-menu" [ngStyle]="{'left.px': CMI.offsetWidth, 'top.px': CM.offsetHeight + (CM.offsetHeight/2)}">
+    <div class="context-menu-option" *ngFor="let leave of leaveModel.leaves" (click)="addLeave(leave)">
       {{ leave }}
     </div>
   </div>
 </div>
-
+</div>
 
 <div id="add-shift-options" [classList]="showOptions ?  'context-menu': 'hide'" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
   Work Time
@@ -62,6 +62,7 @@
       </div>
     </form>
   </div>
-
-
 </div>
+
+
+<button class="btn btn-danger" (mousedown)="mouseDown()">A</button>
