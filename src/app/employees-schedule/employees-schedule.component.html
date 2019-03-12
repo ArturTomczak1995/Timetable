@@ -1,22 +1,25 @@
-<div (click)="disableContextMenu()" oncontextmenu="return false;" (mouseup)="mouseUP()">
+<div (click)="disableContextMenu()" oncontextmenu="return false;" (mouseup)="selectedCells = false">
   <table class="table table-bordered">
     <thead>
     <tr>
       <th>Employee</th>
       <ng-container *ngFor="let day of calendarDaysArr; let dayNameIdx = index">
-        <th *ngIf="day.isActive"  [classList]="dayClass === dayNameIdx ? 'highlight' : 'lowLight'">
-            {{ day.dayName }} {{ day.i }}
+        <th *ngIf="day.isActive" [classList]="dayClass === dayNameIdx ? 'highlight' : 'lowLight'">
+          {{ day.dayName }} {{ day.i }}
         </th>
       </ng-container>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let employee of employees; let empIdx = index" >
+    <tr *ngFor="let employee of employees; let empIdx = index">
       <th [classList]="employeeClass === empIdx ? 'highlight' : 'lowLight'">{{ employee.name }}</th>
       <ng-container *ngFor="let day of calendarDaysArr; let dayIdx = index">
         <th *ngIf="day.isActive" (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = null"
-            (contextmenu)="onRightClick($event, dayIdx, empIdx)" [classList]="selectedField === dayIdx + '-' + empIdx ? 'selected-field' : 'employee-field'"
-            (mousedown)="mouseDown()" (mousemove)="mouseMove(dayIdx + '-' + empIdx)">
+            (contextmenu)="onRightClick($event, dayIdx, empIdx)"
+            (mousedown)="mouseDown(dayIdx, empIdx)" (mousemove)="mouseMove(dayIdx, empIdx)" #cell
+            [id]="dayIdx + '-' + empIdx"
+            [classList]="minDayIdx <= cell.id.split('-')[0] && cell.id.split('-')[0] <= maxDayIdx && minEmpIdx <= cell.id.split('-')[1] && cell.id.split('-')[1] <= maxEmpIdx
+            ? 'selected-field' : 'employee-field'">
         </th>
       </ng-container>
     </tr>
@@ -24,7 +27,8 @@
   </table>
 </div>
 
-<div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;" #CMI>
+<div class="context-menu" *ngIf="contextMenu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;"
+     #CMI>
   <div class="context-menu-option" (click)="showShiftWindow()" (mouseover)="leaveOptionsContext = false">
     Add shift
   </div>
@@ -33,17 +37,17 @@
   </div>
 
 
-
-<div class="add-leave-options" *ngIf="leaveOptionsContext" (mouseleave)="leaveOptionsContext = false">
-  <div class="context-menu" [ngStyle]="{'left.px': CMI.offsetWidth, 'top.px': CM.offsetHeight + (CM.offsetHeight/2)}">
-    <div class="context-menu-option" *ngFor="let leave of leaveModel.leaves" (click)="addLeave(leave)">
-      {{ leave }}
+  <div class="add-leave-options" *ngIf="leaveOptionsContext" (mouseleave)="leaveOptionsContext = false">
+    <div class="context-menu" [ngStyle]="{'left.px': CMI.offsetWidth, 'top.px': CM.offsetHeight + (CM.offsetHeight/2)}">
+      <div class="context-menu-option" *ngFor="let leave of leaveModel.leaves" (click)="addLeave(leave)">
+        {{ leave }}
+      </div>
     </div>
   </div>
 </div>
-</div>
 
-<div id="add-shift-options" [classList]="showOptions ?  'context-menu': 'hide'" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
+<div id="add-shift-options" [classList]="showOptions ?  'context-menu': 'hide'" [ngStyle]="{'left.px': x, 'top.px': y}"
+     oncontextmenu="return false;">
   Work Time
   <div class="context-menu" id="add-shift-options-time">
     <form #userForm="ngForm">
@@ -51,8 +55,9 @@
         <input type="hidden" name="id" [(ngModel)]="shiftModel.id">
         <input type="hidden" name="date" [(ngModel)]="shiftModel.date">
         <label for="add-shift-options-time-start">Start </label>
-        <input class="form-control" id="add-shift-options-time-start" #shiftStart="ngModel" name="shiftStart" type="text" [(ngModel)]="shiftModel.shiftStart"
-                [class.is-invalid]="shiftStart.invalid && shiftStart.touched">
+        <input class="form-control" id="add-shift-options-time-start" #shiftStart="ngModel" name="shiftStart"
+               type="text" [(ngModel)]="shiftModel.shiftStart"
+               [class.is-invalid]="shiftStart.invalid && shiftStart.touched">
         <label for="add-shift-options-time-end">End </label>
         <input class="form-control" id="add-shift-options-time-end" name="shiftEnd" type="text" #shiftEnd="ngModel"
                [(ngModel)]="shiftModel.shiftEnd" [class.is-invalid]="shiftEnd.invalid && shiftEnd.touched">
