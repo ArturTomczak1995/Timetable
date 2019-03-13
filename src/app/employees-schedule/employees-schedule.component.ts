@@ -1,10 +1,10 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as moment from 'moment';
 
+import {ContextMenuSettingsService} from '../services/context-menu-settings.service';
 import {CalendarDatesService} from '../services/calendar-dates.service';
 import {EmployeesService} from '../services/employees.service';
-import {Shifts} from '../shifts';
-import {Leaves} from '../leaves';
+
 
 @Component({
   selector: 'app-employees-schedule',
@@ -13,80 +13,59 @@ import {Leaves} from '../leaves';
 })
 export class EmployeesScheduleComponent implements OnInit {
 
+
   constructor(private calendarDatesService: CalendarDatesService,
-              private employeesService: EmployeesService
-  ) { }
+              private employeesService: EmployeesService,
+              private contextMenuSettings: ContextMenuSettingsService
+  ) {
+  }
 
   private currentMonth = moment().format('MM');
   private currentYear = moment().format('YYYY');
   shiftStart = '06:00';
-  shiftEnd = '18:00';
+  // shiftEnd = '18:00';
 
-  x: null;
-  y: null;
-  calendarDaysArr: any;
-  selectedField: string;
-  contextMenu = false;
-  employeeClass: number;
-  showOptions = false;
-  employees = [];
-  dayClass: any;
-  leaveOptionsContext = false;
+  private x: null;
+  private y: null;
 
-  selectedCells = false;
-  @Input() cmWidth: number;
+  private employees = [];
+  private selectedField: string;
+  private employeeClass: number;
+  private calendarDaysArr: any;
+  private dayClass: any;
+  private leaveOptionsContext: boolean;
+  private contextMenu = false;
+  private selectedCells = false;
 
-  minDayIdx: number;
-  minEmpIdx: number;
-  maxDayIdx: number;
-  maxEmpIdx: number;
-  buforEmpIdx: number;
-  buforDayIdx: number;
+  private minDayIdx: number;
+  private minEmpIdx: number;
+  private maxDayIdx: number;
+  private maxEmpIdx: number;
+  private buforEmpIdx: number;
+  private buforDayIdx: number;
 
-  shiftModel = new Shifts(1, '06:00', '18:00', null);
-  leaveModel = new Leaves();
 
   ngOnInit() {
     this.calendarDaysArr = this.calendarDatesService.calendarDays(this.currentMonth, this.currentYear);
     this.employeesService.getEmployees()
       .subscribe(data => this.employees = data);
+    this.contextMenuSettings.currentMessage.subscribe(message => this.leaveOptionsContext = message);
   }
 
-
-
   onRightClick(event, dayIdx, empIdx) {
-    const selectedDate = this.calendarDaysArr[dayIdx].i + '-' + this.currentMonth + '-' + this.currentYear;
-    const dateTimestamp = moment(selectedDate, 'DD-MM-YYYY').valueOf();
+    // const selectedDate = this.calendarDaysArr[dayIdx].i + '-' + this.currentMonth + '-' + this.currentYear;
+    // const dateTimestamp = moment(selectedDate, 'DD-MM-YYYY').valueOf();
     this.disableContextMenu();
     this.x = event.clientX;
     this.y = event.clientY;
     this.contextMenu = true;
-    this.shiftModel.id = empIdx;
-    this.shiftModel.date = dateTimestamp;
     this.selectedField = dayIdx + '-' + empIdx;
-  }
-
-  showShiftWindow() {
-    this.contextMenu = false;
-    this.showOptions = true;
   }
 
   disableContextMenu() {
     this.contextMenu = false;
-    this.showOptions = false;
     this.selectedField = null;
-    this.leaveOptionsContext = false;
-  }
-
-  addShift(even) {
-    event.preventDefault();
-    this.disableContextMenu();
-    console.log(even.shiftStart);
-  }
-
-  addLeave(reason) {
-    console.log(reason);
-    this.disableContextMenu();
+    this.contextMenuSettings.changeMessage(false);
   }
 
   minMaxIdx(minDayIdx, minEmpIdx, maxDayIdx, maxEmpIdx) {
@@ -123,4 +102,5 @@ export class EmployeesScheduleComponent implements OnInit {
     }
 
   }
+
 }

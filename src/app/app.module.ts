@@ -9,6 +9,8 @@ import { EmployeesScheduleComponent } from './employees-schedule/employees-sched
 import { CalendarDatesService } from './services/calendar-dates.service';
 import { EmployeesService } from './services/employees.service';
 import { FormsModule } from '@angular/forms';
+import { ContextMenuComponent } from './context-menu/context-menu.component';
+import { ContextMenuSettingsService } from './services/context-menu-settings.service';
 
 
 @NgModule({
@@ -16,6 +18,7 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     CalendarComponent,
     EmployeesScheduleComponent,
+    ContextMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,6 +29,7 @@ import { FormsModule } from '@angular/forms';
   providers: [
     CalendarDatesService,
     EmployeesService,
+    ContextMenuSettingsService
   ],
   bootstrap: [AppComponent]
 })

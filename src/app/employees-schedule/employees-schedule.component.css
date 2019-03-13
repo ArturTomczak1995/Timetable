@@ -28,37 +28,8 @@
   cursor: pointer;
 }
 
-.context-menu {
-  position: absolute;
-  background-color: #d3d2cc;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.context-menu-option {
-  cursor: pointer;
-  padding: 5px;
-  min-width: 240px;
-
-}
-.context-menu-option:hover {
-  background-color: white;
-}
-
 .show-options {
   padding: 10px;
   position: absolute;
   border: 1px solid #ccc;
-}
-
-.hide {
-  display: none;
-}
-
-#add-shift-options-time{
- position: unset;
-}
-
-#add-shift-options-time-btn {
-  text-align: right;
 }
