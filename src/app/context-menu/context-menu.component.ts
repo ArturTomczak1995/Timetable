@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import {Leaves} from '../leaves';
 import {Shifts} from '../shifts';
 import { ContextMenuSettingsService } from '../services/context-menu-settings.service';
@@ -8,7 +8,7 @@ import { ContextMenuSettingsService } from '../services/context-menu-settings.se
   templateUrl: './context-menu.component.html',
   styleUrls: ['./context-menu.component.css']
 })
-export class ContextMenuComponent implements OnInit {
+export class ContextMenuComponent implements AfterViewInit {
 
   constructor(
     private contextMenuSettings: ContextMenuSettingsService
@@ -21,20 +21,49 @@ export class ContextMenuComponent implements OnInit {
   private showOptions = false;
   private dateTimestamp: number;
   private empIdx: number;
-
   @Input() x: number;
   @Input() y: number;
-  @Output() contextMenuBool = new EventEmitter();
 
-  ngOnInit() {
-    this.contextMenuSettings.currentMessage.subscribe(() => this.default());
+  cmX = -100;
+  cmY = -100;
+
+  @Output() contextMenuBool = new EventEmitter();
+  @ViewChild('CMI') contextMenu: ElementRef;
+
+
+  ngAfterViewInit() {
+    setTimeout(() => {
     this.shiftModel.id = this.empIdx;
     this.shiftModel.date = this.dateTimestamp;
+    this.contextMenuSettings.currentMessage.subscribe(() => this.default());
+    }, 20);
+
+  }
+
+  positionContextMenu() {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const contextMenuWidth = this.contextMenu.nativeElement.offsetWidth;
+    const contextMenuHeight = this.contextMenu.nativeElement.offsetHeight;
+
+    if ( this.x + contextMenuWidth >= windowWidth) {
+      this.x -= contextMenuWidth;
+      console.log('if');
+    }
+    if (this.y + contextMenuHeight >= windowHeight) {
+      this.y -= contextMenuHeight;
+    }
+    this.cmX = this.x;
+    this.cmY = this.y;
+    // console.log(windowWidth);
+    // console.log(this.x);
+    // console.log(contextMenuWidth);
   }
 
   default() {
     this.showOptions = false;
     this.leaveOptionsContext = false;
+    this.positionContextMenu();
   }
 
   showShiftWindow() {

@@ -1,4 +1,4 @@
-<div class="context-menu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;"
+<div class="context-menu" [ngStyle]="{'left.px': cmX, 'top.px': cmY}" oncontextmenu="return false;"
      #CMI>
   <div class="context-menu-option" (click)="showShiftWindow()" (mouseover)="leaveOptionsContext = false">
     Add shift
@@ -39,3 +39,4 @@
     </form>
   </div>
 </div>
+

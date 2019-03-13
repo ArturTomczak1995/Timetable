@@ -53,19 +53,18 @@ export class EmployeesScheduleComponent implements OnInit {
   }
 
   onRightClick(event, dayIdx, empIdx) {
-    // const selectedDate = this.calendarDaysArr[dayIdx].i + '-' + this.currentMonth + '-' + this.currentYear;
-    // const dateTimestamp = moment(selectedDate, 'DD-MM-YYYY').valueOf();
     this.disableContextMenu();
+    setTimeout(() => {
     this.x = event.clientX;
     this.y = event.clientY;
     this.contextMenu = true;
     this.selectedField = dayIdx + '-' + empIdx;
+    }, 10);
   }
 
   disableContextMenu() {
     this.contextMenu = false;
     this.selectedField = null;
-    this.contextMenuSettings.changeMessage(false);
   }
 
   minMaxIdx(minDayIdx, minEmpIdx, maxDayIdx, maxEmpIdx) {

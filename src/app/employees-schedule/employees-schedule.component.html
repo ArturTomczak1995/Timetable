@@ -27,7 +27,7 @@
   </table>
 </div>
 
-<div oncontextmenu="return false;" *ngIf="contextMenu">
+<div oncontextmenu="return false;" *ngIf="contextMenu" >
   <div>
     <app-context-menu (contextMenuBool)="disableContextMenu()" [x]="x" [y]="y">
     </app-context-menu>

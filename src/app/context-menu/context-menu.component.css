@@ -3,6 +3,7 @@
   background-color: #d3d2cc;
   padding: 10px;
   border-radius: 10px;
+  min-width: 250px;
 }
 
 .context-menu-option {
@@ -17,6 +18,10 @@
 
 .hide {
   display: none;
+}
+
+.show {
+  display: unset;
 }
 
 #add-shift-options-time{

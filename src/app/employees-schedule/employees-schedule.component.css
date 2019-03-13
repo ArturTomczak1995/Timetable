@@ -33,3 +33,9 @@
   position: absolute;
   border: 1px solid #ccc;
 }
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
