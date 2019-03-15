@@ -1,18 +1,29 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnInit} from '@angular/core';
+import {map, share} from 'rxjs/operators';
 import {Leaves} from '../leaves';
 import {Shifts} from '../shifts';
-import { ContextMenuSettingsService } from '../services/context-menu-settings.service';
+import {ContextMenuSettingsService} from '../services/context-menu-settings.service';
+import {Observable} from 'rxjs';
+
 
 @Component({
   selector: 'app-context-menu',
   templateUrl: './context-menu.component.html',
   styleUrls: ['./context-menu.component.css']
 })
-export class ContextMenuComponent implements AfterViewInit {
+export class ContextMenuComponent implements OnInit {
 
   constructor(
-    private contextMenuSettings: ContextMenuSettingsService
-  ) { }
+    private contextMenuSettings: ContextMenuSettingsService,
+  ) {
+  }
+
+  @Input() x: number;
+  @Input() y: number;
+  @Output() contextMenuBool = new EventEmitter();
+  @ViewChild('CMI') contextMenu: ElementRef;
+  @ViewChild('CM') contextMenuOption: ElementRef;
+  @ViewChild('LeaveOptions') LeaveOptions: ElementRef;
 
   private leaveModel = new Leaves();
   private shiftModel = new Shifts(1, '06:00', '18:00', null);
@@ -21,49 +32,63 @@ export class ContextMenuComponent implements AfterViewInit {
   private showOptions = false;
   private dateTimestamp: number;
   private empIdx: number;
-  @Input() x: number;
-  @Input() y: number;
 
-  cmX = -100;
-  cmY = -100;
+  contextMenuWidth: number;
+  contextMenuHeight: number;
+  contextMenuLeavePosition: object;
 
-  @Output() contextMenuBool = new EventEmitter();
-  @ViewChild('CMI') contextMenu: ElementRef;
+  positionInitialization: Observable<boolean>;
 
-
-  ngAfterViewInit() {
+  ngOnInit() {
+    this.positionContextMenu();
     setTimeout(() => {
-    this.shiftModel.id = this.empIdx;
-    this.shiftModel.date = this.dateTimestamp;
-    this.contextMenuSettings.currentMessage.subscribe(() => this.default());
-    }, 20);
-
+      this.shiftModel.id = this.empIdx;
+      this.shiftModel.date = this.dateTimestamp;
+      this.contextMenuSettings.currentMessage.subscribe(() => this.default());
+    }, 0);
   }
 
   positionContextMenu() {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const contextMenuWidth = this.contextMenu.nativeElement.offsetWidth;
-    const contextMenuHeight = this.contextMenu.nativeElement.offsetHeight;
+    this.contextMenuWidth = this.contextMenu.nativeElement.offsetWidth;
+    this.contextMenuHeight = this.contextMenu.nativeElement.offsetHeight;
 
-    if ( this.x + contextMenuWidth >= windowWidth) {
-      this.x -= contextMenuWidth;
-      console.log('if');
+    if (this.x + this.contextMenuWidth >= windowWidth) {
+      this.x -= this.contextMenuWidth;
     }
-    if (this.y + contextMenuHeight >= windowHeight) {
-      this.y -= contextMenuHeight;
+    if (this.y + this.contextMenuHeight >= windowHeight) {
+      this.y -= this.contextMenuHeight;
     }
-    this.cmX = this.x;
-    this.cmY = this.y;
-    // console.log(windowWidth);
-    // console.log(this.x);
-    // console.log(contextMenuWidth);
+    this.positionInitialization = Observable.create(observer => {
+      observer.next(true);
+    }).pipe(
+      map(() => true), share());
   }
+
+  positionContextMenuOptions() {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const contextMenuOptionHeight = this.contextMenuOption.nativeElement.offsetHeight;
+    const contextMenuOptionWidth = this.contextMenuOption.nativeElement.offsetWidth;
+    const LeaveOptionsHeight = this.LeaveOptions.nativeElement.offsetHeight;
+    let positionX = this.contextMenuWidth + this.x;
+    let positionY = this.contextMenuHeight - (contextMenuOptionHeight / 2) - 5 + this.y; // 5 = padding
+
+    if (positionX + contextMenuOptionWidth >= windowWidth) {
+      positionX = this.x - this.contextMenuWidth;
+    }
+    if (positionY + LeaveOptionsHeight >= windowHeight) {
+      positionY -= LeaveOptionsHeight;
+    }
+    this.contextMenuLeavePosition = {'left.px': positionX, 'top.px': positionY};
+  }
+
 
   default() {
     this.showOptions = false;
     this.leaveOptionsContext = false;
-    this.positionContextMenu();
+    this.positionContextMenuOptions();
   }
 
   showShiftWindow() {
@@ -80,4 +105,5 @@ export class ContextMenuComponent implements AfterViewInit {
     console.log(reason);
     this.contextMenuBool.emit(false);
   }
+
 }

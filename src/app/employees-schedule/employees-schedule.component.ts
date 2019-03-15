@@ -5,7 +5,6 @@ import {ContextMenuSettingsService} from '../services/context-menu-settings.serv
 import {CalendarDatesService} from '../services/calendar-dates.service';
 import {EmployeesService} from '../services/employees.service';
 
-
 @Component({
   selector: 'app-employees-schedule',
   templateUrl: './employees-schedule.component.html',
@@ -50,6 +49,12 @@ export class EmployeesScheduleComponent implements OnInit {
     this.employeesService.getEmployees()
       .subscribe(data => this.employees = data);
     this.contextMenuSettings.currentMessage.subscribe(message => this.leaveOptionsContext = message);
+
+  }
+
+  disableContextMenu() {
+    this.contextMenu = false;
+    this.selectedField = null;
   }
 
   onRightClick(event, dayIdx, empIdx) {
@@ -60,11 +65,6 @@ export class EmployeesScheduleComponent implements OnInit {
     this.contextMenu = true;
     this.selectedField = dayIdx + '-' + empIdx;
     }, 10);
-  }
-
-  disableContextMenu() {
-    this.contextMenu = false;
-    this.selectedField = null;
   }
 
   minMaxIdx(minDayIdx, minEmpIdx, maxDayIdx, maxEmpIdx) {
