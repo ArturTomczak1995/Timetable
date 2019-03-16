@@ -17,10 +17,11 @@
         <th #cell [id]="dayIdx + '-' + empIdx" *ngIf="day.isActive"
             (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = null"
             (contextmenu)="onRightClick($event, dayIdx, empIdx)"
-            (mousedown)="mouseDown(dayIdx, empIdx)" (mousemove)="mouseMove(dayIdx, empIdx)"
+            (mousedown)="mouseDown(dayIdx, empIdx, cell.className, $event)" (mousemove)="mouseMove(dayIdx, empIdx)"
             [classList]="minDayIdx <= cell.id.split('-')[0] && cell.id.split('-')[0] <= maxDayIdx && minEmpIdx <= cell.id.split('-')[1] && cell.id.split('-')[1] <= maxEmpIdx
-            ? 'selected-field' : 'employee-field'">
+            ? 'selected-field' : 'unselected-field'">
         </th>
+
       </ng-container>
     </tr>
     </tbody>

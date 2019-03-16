@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as moment from 'moment';
 
 import {ContextMenuSettingsService} from '../services/context-menu-settings.service';
@@ -43,6 +43,8 @@ export class EmployeesScheduleComponent implements OnInit {
   private buforEmpIdx: number;
   private buforDayIdx: number;
 
+  @ViewChild('cell') cellsChild: ElementRef;
+
 
   ngOnInit() {
     this.calendarDaysArr = this.calendarDatesService.calendarDays(this.currentMonth, this.currentYear);
@@ -64,7 +66,7 @@ export class EmployeesScheduleComponent implements OnInit {
     this.y = event.clientY;
     this.contextMenu = true;
     this.selectedField = dayIdx + '-' + empIdx;
-    }, 10);
+    }, 0);
   }
 
   minMaxIdx(minDayIdx, minEmpIdx, maxDayIdx, maxEmpIdx) {
@@ -74,11 +76,14 @@ export class EmployeesScheduleComponent implements OnInit {
     this.maxEmpIdx = maxEmpIdx;
   }
 
-  mouseDown(dayIdx, empIdx) {
-    this.buforDayIdx = dayIdx;
-    this.buforEmpIdx = empIdx;
-    this.minMaxIdx(dayIdx, empIdx, dayIdx, empIdx);
-    this.selectedCells = true;
+  mouseDown(dayIdx, empIdx, fieldClass, event) {
+    if (event.which === 1 || fieldClass === 'unselected-field') {
+      this.buforDayIdx = dayIdx;
+      this.buforEmpIdx = empIdx;
+      this.minMaxIdx(dayIdx, empIdx, dayIdx, empIdx);
+      this.selectedCells = true;
+    }
+
   }
 
   mouseMove(dayIdx, empIdx) {

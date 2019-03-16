@@ -13,10 +13,10 @@
   color: white;
 }
 
-.employee-field:hover {
+.unselected-field:hover {
   background-color: aliceblue;
 }
-.employee-field {
+.unselected-field {
   cursor: pointer;
 }
 
