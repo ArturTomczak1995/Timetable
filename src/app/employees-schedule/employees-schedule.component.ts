@@ -5,6 +5,7 @@ import {ContextMenuSettingsService} from '../services/context-menu-settings.serv
 import {CalendarDatesService} from '../services/calendar-dates.service';
 import {EmployeesService} from '../services/employees.service';
 
+
 @Component({
   selector: 'app-employees-schedule',
   templateUrl: './employees-schedule.component.html',
@@ -49,14 +50,17 @@ export class EmployeesScheduleComponent implements OnInit {
   ngOnInit() {
     this.calendarDaysArr = this.calendarDatesService.calendarDays(this.currentMonth, this.currentYear);
     this.employeesService.getEmployees()
-      .subscribe(data => this.employees = data);
+      .subscribe(data => {this.employees = data; console.log(data); });
+
     this.contextMenuSettings.currentMessage.subscribe(message => this.leaveOptionsContext = message);
+
 
   }
 
   disableContextMenu() {
     this.contextMenu = false;
     this.selectedField = null;
+    console.log(this.employees);
   }
 
   onRightClick(event, dayIdx, empIdx) {

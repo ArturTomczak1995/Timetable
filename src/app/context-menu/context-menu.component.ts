@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnInit} from '@angular/core';
-import {map, share} from 'rxjs/operators';
+
 import {Leaves} from '../leaves';
 import {Shifts} from '../shifts';
 import {ContextMenuSettingsService} from '../services/context-menu-settings.service';
@@ -60,10 +60,10 @@ export class ContextMenuComponent implements OnInit {
     if (this.y + this.contextMenuHeight >= windowHeight) {
       this.y -= this.contextMenuHeight;
     }
+    this.positionContextMenuOptions();
     this.positionInitialization = Observable.create(observer => {
       observer.next(true);
-    }).pipe(
-      map(() => true), share());
+    });
   }
 
   positionContextMenuOptions() {
@@ -71,28 +71,29 @@ export class ContextMenuComponent implements OnInit {
     const windowHeight = window.innerHeight;
     const contextMenuOptionHeight = this.contextMenuOption.nativeElement.offsetHeight;
     const contextMenuOptionWidth = this.contextMenuOption.nativeElement.offsetWidth;
-    const LeaveOptionsHeight = this.LeaveOptions.nativeElement.offsetHeight;
+    const leavesLen = this.leaveModel.leaves.length;
     let positionX = this.contextMenuWidth + this.x;
     let positionY = this.contextMenuHeight - (contextMenuOptionHeight / 2) - 5 + this.y; // 5 = padding
 
     if (positionX + contextMenuOptionWidth >= windowWidth) {
       positionX = this.x - this.contextMenuWidth;
     }
-    if (positionY + LeaveOptionsHeight >= windowHeight) {
-      positionY -= LeaveOptionsHeight;
+    if (positionY + leavesLen * contextMenuOptionHeight >= windowHeight) {
+      positionY -= leavesLen * contextMenuOptionHeight + contextMenuOptionHeight / 2;
     }
     this.contextMenuLeavePosition = {'left.px': positionX, 'top.px': positionY};
   }
 
-
   default() {
     this.showOptions = false;
     this.leaveOptionsContext = false;
-    this.positionContextMenuOptions();
   }
 
   showShiftWindow() {
     this.showOptions = true;
+    this.positionInitialization = Observable.create(observer => {
+      observer.next(false);
+    });
   }
 
   addShift(even) {

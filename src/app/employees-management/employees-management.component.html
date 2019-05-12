@@ -1,0 +1,26 @@
+
+<div id="container">
+  <button class="btn btn-success" routerLink="add">Add Employee</button>
+</div>
+
+<table class="table table-bordered">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Surname</th>
+    <th>Phone</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let employee of employees">
+    <th>{{ employee.name }}</th>
+    <th>{{ employee.surname }}</th>
+    <th>{{ employee.phone }}</th>
+    <th style="padding-left: 10px">
+      <button class="btn btn-outline-secondary" (click)="getEmployee(employee.id)">Edit</button>
+      <button class="btn btn-danger" (click)="removeEmployee(employee.id)">Delete</button>
+    </th>
+  </tr>
+  </tbody>
+</table>

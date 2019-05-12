@@ -1,5 +1,5 @@
 .context-menu {
-  position: fixed;
+  position: absolute;
   background-color: #d3d2cc;
   padding: 10px;
   border-radius: 10px;
@@ -24,9 +24,9 @@
   display: block;
 }
 
-#add-shift-options-time{
-  display: none;
-}
+/*#add-shift-options-time{*/
+  /*display: none;*/
+/*}*/
 
 #add-shift-options-time-btn {
   text-align: right;

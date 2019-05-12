@@ -7,7 +7,10 @@
     <div class="context-menu-option" (mouseover)="leaveOptionsContext = true" #CM>
       Add leave <span style="float: right"> > </span>
     </div>
-
+    <div class="context-menu-option" (mouseover)="leaveOptionsContext = false">
+      Note
+    </div>
+  </div>
 
     <div class="add-leave-options" [classList]="leaveOptionsContext ?  'show': 'hide'"
          (mouseleave)="leaveOptionsContext = false">
@@ -22,8 +25,6 @@
   <div id="add-shift-options" [classList]="showOptions ?  'context-menu': 'hide'"
        [ngStyle]="{'left.px': x, 'top.px': y}"
        oncontextmenu="return false;">
-    Work Time
-    <div class="context-menu" id="add-shift-options-time">
       <form #userForm="ngForm">
         <div class="form-group">
           <input type="hidden" name="id" [(ngModel)]="shiftModel.id">
@@ -36,10 +37,11 @@
           <input class="form-control" id="add-shift-options-time-end" name="shiftEnd" type="text" #shiftEnd="ngModel"
                  [(ngModel)]="shiftModel.shiftEnd" [class.is-invalid]="shiftEnd.invalid && shiftEnd.touched">
         </div>
-        <div id="add-shift-options-time-btn">
+        <div id="add-employee-btn">
           <button class="btn btn-outline-success" type="submit" (click)="addShift(userForm.value)">Add</button>
         </div>
       </form>
-    </div>
+
+
   </div>
-</div>
+

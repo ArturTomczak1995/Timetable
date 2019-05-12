@@ -1,0 +1,17 @@
+View:
+<div id="view-buttons">
+  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <label class="btn btn-light active">
+      <input type="radio" name="options" [checked]='true' (focus)="changeView('employeesView')">
+      Schedule
+    </label>
+    <label class="btn btn-light">
+      <input type="radio" name="options" (focus)="changeView('calendarView')" ngModel>
+      Calendar
+    </label>
+  </div>
+</div>
+<app-calendar *ngIf="view === 'calendarView'"></app-calendar>
+<div *ngIf="view === 'employeesView'">
+  <app-employees-schedule></app-employees-schedule>
+</div>

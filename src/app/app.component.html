@@ -1,17 +1,5 @@
+<app-navbar></app-navbar>
 
-View:
-<div id="view-buttons">
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-light active">
-        <input type="radio" name="options" [checked]='true' (focus)="changeView('employeesView')">
-        Schedule
-      </label>
-      <label class="btn btn-light">
-        <input type="radio" name="options" (focus)="changeView('calendarView')" ngModel>
-        Calendar
-      </label>
-  </div>
+<div style="padding-top: 50px">
+  <router-outlet></router-outlet>
 </div>
-<app-calendar *ngIf="view === 'calendarView'"></app-calendar>
-<app-employees-schedule *ngIf="view === 'employeesView'"></app-employees-schedule>
-<router-outlet></router-outlet>
