@@ -31,11 +31,4 @@ export class EmployeesManagementComponent implements OnInit {
     console.log('remove ' + employeeId);
 
   }
-
-  getEmployee(employeeId) {
-    this.employeesService.getEmployee(employeeId).subscribe(data => {this.employee = data; console.log(data); });
-  }
-
-
-
 }

@@ -2,6 +2,10 @@
   <form #userForm="ngForm">
     <div class="form-group">
 
+
+      <label *ngIf="edition"  class="hide" for="employee-id">Id </label>
+      <input *ngIf="edition"  class="hide" type="number" id="employee-id" name="id" [(ngModel)]="employeeId">
+
       <label for="employee-name">Name </label>
       <input class="form-control" id="employee-name" name="name" type="text" [(ngModel)]="employeeModel.name">
 
@@ -10,9 +14,14 @@
 
       <label for="employee-phone">Phone </label>
       <input class="form-control" id="employee-phone" name="phone" type="text" [(ngModel)]="employeeModel.phone">
-    </div>
-    <div id="add-employee">
-      <button class="btn btn-outline-success" type="submit" (click)="addEmployee(userForm.value)">Add</button>
+
     </div>
   </form>
+  <div>
+    <button *ngIf="!edition" class="btn btn-outline-success" type="submit" (click)="addEmployee(userForm.value)">Add</button>
+    <button *ngIf="edition" class="btn btn-outline-success" type="submit" (click)="editEmployee(userForm.value)">Edit</button>
+
+    <button class="btn btn-outline-secondary" type="submit" (click)="backClicked()">Cancel</button>
+  </div>
+
 </div>

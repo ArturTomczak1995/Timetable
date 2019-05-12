@@ -13,8 +13,8 @@ import { ContextMenuComponent } from './context-menu/context-menu.component';
 import { ContextMenuSettingsService } from './services/context-menu-settings.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MainViewComponent } from './main-view/main-view.component';
-import { AddEmployeeComponent } from './employees-management/add-employee/add-employee.component';
 import { EmployeesManagementComponent } from './employees-management/employees-management.component';
+import { AddEditComponent } from './employees-management/add-edit/add-edit.component';
 
 
 @NgModule({
@@ -26,8 +26,8 @@ import { EmployeesManagementComponent } from './employees-management/employees-m
     NavbarComponent,
     routingComponents,
     MainViewComponent,
-    AddEmployeeComponent,
-    EmployeesManagementComponent
+    EmployeesManagementComponent,
+    AddEditComponent,
   ],
   imports: [
     BrowserModule,

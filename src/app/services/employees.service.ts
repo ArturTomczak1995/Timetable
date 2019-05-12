@@ -31,6 +31,10 @@ export class EmployeesService {
     return this.http.delete('http://127.0.0.1:8081/employees' + '/' + employeeId);
   }
 
+  editEmployee(employee) {
+    return this.http.put('http://127.0.0.1:8081/employees', employee);
+  }
+
 
 
 

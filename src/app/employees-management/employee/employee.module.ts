@@ -12,7 +12,17 @@ export class EmployeeModule {
   constructor(
     public name: string,
     public surname: string,
-    public phone: string
+    public phone: string,
   ) {}
+
+  private id: number;
+
+  getId(): number {
+    return this.id;
+  }
+
+  setId(value: number) {
+    this.id = value;
+  }
 
 }
