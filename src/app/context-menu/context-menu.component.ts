@@ -1,9 +1,12 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnInit} from '@angular/core';
 
-import {Leaves} from '../leaves';
-import {Shifts} from '../shifts';
+
+import {Shifts} from '../models/shifts';
+import {Leave} from '../models/leave.model';
 import {ContextMenuSettingsService} from '../services/context-menu-settings.service';
 import {Observable} from 'rxjs';
+import {LeavesService} from '../services/leaves.service';
+import {ShiftHoursService} from '../services/shift-hours.service';
 
 
 @Component({
@@ -15,6 +18,8 @@ export class ContextMenuComponent implements OnInit {
 
   constructor(
     private contextMenuSettings: ContextMenuSettingsService,
+    private leavesService: LeavesService,
+    private shiftHoursService: ShiftHoursService,
   ) {
   }
 
@@ -25,17 +30,23 @@ export class ContextMenuComponent implements OnInit {
   @ViewChild('CM') contextMenuOption: ElementRef;
   @ViewChild('LeaveOptions') LeaveOptions: ElementRef;
 
-  private leaveModel = new Leaves();
   private shiftModel = new Shifts(1, '06:00', '18:00', null);
+  private leaveReasonModel = new Leave( '');
 
   private leaveOptionsContext = false;
+  private shiftOptionsContext = false;
   private showOptions = false;
+  private addLeaveReasonWindow = false;
   private dateTimestamp: number;
   private empIdx: number;
+  private leavesReasonsArr = [];
+  private shiftsHoursArr = [];
+  private addShiftOptionsBool = false;
 
   contextMenuWidth: number;
   contextMenuHeight: number;
   contextMenuLeavePosition: object;
+  contextMenuShiftPosition: object;
 
   positionInitialization: Observable<boolean>;
 
@@ -44,6 +55,8 @@ export class ContextMenuComponent implements OnInit {
     setTimeout(() => {
       this.shiftModel.id = this.empIdx;
       this.shiftModel.date = this.dateTimestamp;
+      this.getLeaveReasons();
+      this.getShiftHours();
       this.contextMenuSettings.currentMessage.subscribe(() => this.default());
     }, 0);
   }
@@ -71,9 +84,9 @@ export class ContextMenuComponent implements OnInit {
     const windowHeight = window.innerHeight;
     const contextMenuOptionHeight = this.contextMenuOption.nativeElement.offsetHeight;
     const contextMenuOptionWidth = this.contextMenuOption.nativeElement.offsetWidth;
-    const leavesLen = this.leaveModel.leaves.length;
+    const leavesLen = this.leavesReasonsArr.length;
     let positionX = this.contextMenuWidth + this.x;
-    let positionY = this.contextMenuHeight - (contextMenuOptionHeight / 2) - 5 + this.y; // 5 = padding
+    let positionY = this.contextMenuHeight - (contextMenuOptionHeight / 2) - 45 + this.y; // 5 = padding
 
     if (positionX + contextMenuOptionWidth >= windowWidth) {
       positionX = this.x - this.contextMenuWidth;
@@ -82,6 +95,7 @@ export class ContextMenuComponent implements OnInit {
       positionY -= leavesLen * contextMenuOptionHeight + contextMenuOptionHeight / 2;
     }
     this.contextMenuLeavePosition = {'left.px': positionX, 'top.px': positionY};
+    this.contextMenuShiftPosition = {'left.px': positionX, 'top.px': positionY - 40};
   }
 
   default() {
@@ -89,22 +103,56 @@ export class ContextMenuComponent implements OnInit {
     this.leaveOptionsContext = false;
   }
 
-  showShiftWindow() {
+  showShiftWindow(isAddShift) {
+    this.addShiftOptionsBool = isAddShift;
     this.showOptions = true;
     this.positionInitialization = Observable.create(observer => {
       observer.next(false);
     });
   }
 
-  addShift(even) {
+
+  showAddLeaveReasonWindow() {
+    this.addLeaveReasonWindow = true;
+    this.positionInitialization = Observable.create(observer => {
+      observer.next(false);
+    });
+  }
+
+  addShift(shift) {
     event.preventDefault();
-    console.log(even.shiftStart);
+    console.log(shift.shiftStart);
     this.contextMenuBool.emit(false);
   }
 
-  addLeave(reason) {
-    console.log(reason);
+  addLeave(leave) {
+    console.log(leave);
     this.contextMenuBool.emit(false);
   }
+
+  addLeaveReason(leaveReason) {
+    this.contextMenuBool.emit(false);
+    this.leavesService.addLeaves(leaveReason)
+      .subscribe(data => {console.log(data);
+      });
+  }
+
+  getLeaveReasons() {
+    this.leavesService.getLeaves()
+      .subscribe(data => {this.leavesReasonsArr = data;
+      });
+  }
+
+  getShiftHours() {
+    this.shiftHoursService.getHours()
+      .subscribe(data => {this.shiftsHoursArr = data; console.log(data);
+      });
+  }
+
+  addShiftOption(hoursOption) {
+    this.shiftHoursService.addHours(hoursOption);
+}
+
+// TODO make add shift hours button work, and optimize this code
 
 }

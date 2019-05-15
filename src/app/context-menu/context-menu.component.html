@@ -1,13 +1,13 @@
 <div [classList]="(positionInitialization|async) ? 'show' : 'hide'">
 
   <div class="context-menu" [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;" #CMI>
-    <div class="context-menu-option" (click)="showShiftWindow()" (mouseover)="leaveOptionsContext = false">
-      Add shift
+    <div class="context-menu-option" (mouseover)="leaveOptionsContext = false; shiftOptionsContext = true">
+      Add shift <span style="float: right"> > </span>
     </div>
-    <div class="context-menu-option" (mouseover)="leaveOptionsContext = true" #CM>
+    <div class="context-menu-option" (mouseover)="leaveOptionsContext = true; shiftOptionsContext = false" #CM>
       Add leave <span style="float: right"> > </span>
     </div>
-    <div class="context-menu-option" (mouseover)="leaveOptionsContext = false">
+    <div class="context-menu-option" (mouseover)="leaveOptionsContext = false; shiftOptionsContext = false">
       Note
     </div>
   </div>
@@ -15,17 +15,35 @@
     <div class="add-leave-options" [classList]="leaveOptionsContext ?  'show': 'hide'"
          (mouseleave)="leaveOptionsContext = false">
       <div class="context-menu" [ngStyle]="contextMenuLeavePosition" #LeaveOptions>
-        <div class="context-menu-option" *ngFor="let leave of leaveModel.leaves" (click)="addLeave(leave)">
-          {{ leave }}
+        <div class="context-menu-option" *ngFor="let leaveReason of leavesReasonsArr" (click)="addLeave(leaveReason)">
+          {{ leaveReason["leaveReason"] }}
         </div>
+        <div class="context-menu-option" (click)="showAddLeaveReasonWindow()">Add...</div>
       </div>
     </div>
+
+  <div class="add-shift-options" [classList]="shiftOptionsContext ?  'show': 'hide'"
+       (mouseleave)="shiftOptionsContext = false">
+    <div class="context-menu" [ngStyle]="contextMenuShiftPosition">
+      <div class="context-menu-option" (click)="showShiftWindow(false)" >
+        Custom
+      </div>
+      <div class="context-menu-option" *ngFor="let shiftHours of shiftsHoursArr" (click)="addLeave(leaveReason)">
+        {{ shiftHours["shiftStart"] + " " + shiftHours["shiftEnd"]}}
+      </div>
+      <div class="context-menu-option" (click)="showShiftWindow(true);">Add...</div>
+    </div>
+  </div>
+
   </div>
 
   <div id="add-shift-options" [classList]="showOptions ?  'context-menu': 'hide'"
        [ngStyle]="{'left.px': x, 'top.px': y}"
        oncontextmenu="return false;">
-      <form #userForm="ngForm">
+    <div *ngIf="!addShiftOptionsBool">Add custom shift</div>
+    <div *ngIf="addShiftOptionsBool">Add shift hours</div>
+
+    <form #userForm="ngForm">
         <div class="form-group">
           <input type="hidden" name="id" [(ngModel)]="shiftModel.id">
           <input type="hidden" name="date" [(ngModel)]="shiftModel.date">
@@ -38,10 +56,25 @@
                  [(ngModel)]="shiftModel.shiftEnd" [class.is-invalid]="shiftEnd.invalid && shiftEnd.touched">
         </div>
         <div id="add-employee-btn">
-          <button class="btn btn-outline-success" type="submit" (click)="addShift(userForm.value)">Add</button>
+          <button *ngIf="!addShiftOptionsBool" class="btn btn-outline-success" type="submit" (click)="addShift(userForm.value)">Add</button>
+          <button *ngIf="addShiftOptionsBool" class="btn btn-outline-success" type="submit" (click)="addShiftOption(userForm.value)">Add</button>
         </div>
       </form>
-
-
   </div>
+
+<div [classList]="addLeaveReasonWindow ?  'context-menu': 'hide'"
+     [ngStyle]="{'left.px': x, 'top.px': y}" oncontextmenu="return false;">
+  <form #leaveReasonForm="ngForm">
+    <div class="form-group">
+      <label for="add-leave-reason">Add new leave Reason </label>
+      <input class="form-control" id="add-leave-reason" name="leaveReason" type="text" #leaveReason="ngModel"
+             [(ngModel)]="leaveReasonModel.leaveReason" [class.is-invalid]="leaveReason.invalid && leaveReason.touched">
+    </div>
+    <div>
+      <button class="btn btn-outline-success" (click)="addLeaveReason(leaveReasonForm.value)">Add</button>
+    </div>
+  </form>
+</div>
+
+
 
