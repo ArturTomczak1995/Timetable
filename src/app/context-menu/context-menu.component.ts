@@ -7,6 +7,9 @@ import {ContextMenuSettingsService} from '../services/context-menu-settings.serv
 import {Observable} from 'rxjs';
 import {LeavesService} from '../services/leaves.service';
 import {ShiftHoursService} from '../services/shift-hours.service';
+import * as moment from 'moment';
+import {ShiftService} from '../services/shift.service';
+import {EmployeeForm} from '../models/employee-form.model';
 
 
 @Component({
@@ -20,28 +23,30 @@ export class ContextMenuComponent implements OnInit {
     private contextMenuSettings: ContextMenuSettingsService,
     private leavesService: LeavesService,
     private shiftHoursService: ShiftHoursService,
+    private shiftService: ShiftService
   ) {
   }
 
   @Input() x: number;
   @Input() y: number;
+  @Input() employeeForm: EmployeeForm;
   @Output() contextMenuBool = new EventEmitter();
   @ViewChild('CMI') contextMenu: ElementRef;
   @ViewChild('CM') contextMenuOption: ElementRef;
   @ViewChild('LeaveOptions') LeaveOptions: ElementRef;
 
-  private shiftModel = new Shifts(1, '06:00', '18:00', null);
+  private shiftModel1 = {shiftStart: '06:00', shiftEnd: '18:00'};
   private leaveReasonModel = new Leave( '');
 
   private leaveOptionsContext = false;
   private shiftOptionsContext = false;
   private showOptions = false;
   private addLeaveReasonWindow = false;
-  private dateTimestamp: number;
-  private empIdx: number;
   private leavesReasonsArr = [];
   private shiftsHoursArr = [];
   private addShiftOptionsBool = false;
+
+  private shifts: Shifts = new Shifts(null, null);
 
   contextMenuWidth: number;
   contextMenuHeight: number;
@@ -53,8 +58,6 @@ export class ContextMenuComponent implements OnInit {
   ngOnInit() {
     this.positionContextMenu();
     setTimeout(() => {
-      this.shiftModel.id = this.empIdx;
-      this.shiftModel.date = this.dateTimestamp;
       this.getLeaveReasons();
       this.getShiftHours();
       this.contextMenuSettings.currentMessage.subscribe(() => this.default());
@@ -121,7 +124,13 @@ export class ContextMenuComponent implements OnInit {
 
   addShift(shift) {
     event.preventDefault();
-    console.log(shift.shiftStart);
+    const employeeId = this.employeeForm.id;
+    const shiftStartTimestamp = moment(this.employeeForm.date + ' ' + shift.shiftStart, 'YYYY-MM-DD HH:mm').valueOf();
+    const shiftEndTimestamp = moment(this.employeeForm.date + ' ' + shift.shiftEnd, 'YYYY-MM-DD HH:mm').valueOf();
+    console.log(employeeId, shiftStartTimestamp, shiftEndTimestamp);
+    this.shifts.setshiftStart(shiftStartTimestamp);
+    this.shifts.setshiftEnd(shiftEndTimestamp);
+    this.shiftService.addShift(employeeId, this.shifts).subscribe(data => console.log(data));
     this.contextMenuBool.emit(false);
   }
 
@@ -145,12 +154,13 @@ export class ContextMenuComponent implements OnInit {
 
   getShiftHours() {
     this.shiftHoursService.getHours()
-      .subscribe(data => {this.shiftsHoursArr = data; console.log(data);
-      });
+      .subscribe(data => {this.shiftsHoursArr = data; });
   }
 
   addShiftOption(hoursOption) {
-    this.shiftHoursService.addHours(hoursOption);
+    this.shiftHoursService.addHours(hoursOption)
+      .subscribe(data => console.log(data));
+    this.contextMenuBool.emit(false);
 }
 
 // TODO make add shift hours button work, and optimize this code

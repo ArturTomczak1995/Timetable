@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import {ContextMenuSettingsService} from '../services/context-menu-settings.service';
 import {CalendarDatesService} from '../services/calendar-dates.service';
 import {EmployeesService} from '../services/employees.service';
+import {EmployeeForm} from '../models/employee-form.model';
 
 
 @Component({
@@ -43,6 +44,8 @@ export class EmployeesScheduleComponent implements OnInit {
   private maxEmpIdx: number;
   private buforEmpIdx: number;
   private buforDayIdx: number;
+
+  private employeeForm = new EmployeeForm();
 
   @ViewChild('cell') cellsChild: ElementRef;
 
@@ -107,6 +110,14 @@ export class EmployeesScheduleComponent implements OnInit {
         this.selectedField = msg;
       }
     }
+
+  }
+
+  createEmployeeForm(dayIdx, empIdx) {
+    const employeeId = this.employees[empIdx].id;
+    const date = this.currentYear + '-' + this.currentMonth + '-' + this.calendarDaysArr[dayIdx].i;
+    this.employeeForm.id = employeeId;
+    this.employeeForm.date = date;
 
   }
 

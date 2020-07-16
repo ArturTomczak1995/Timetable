@@ -12,11 +12,11 @@
     </thead>
     <tbody>
     <tr *ngFor="let employee of employees; let empIdx = index">
-      <th [classList]="employeeClass === empIdx ? 'highlight' : 'lowLight'">{{ employee.name }}</th>
+      <th [classList]="employeeClass === empIdx ? 'highlight' : 'lowLight'">{{ employee.name + " " + employee.surname }}</th>
       <ng-container *ngFor="let day of calendarDaysArr; let dayIdx = index">
         <th #cell [id]="dayIdx + '-' + empIdx" *ngIf="day.isActive"
             (mouseover)="dayClass = dayIdx; employeeClass = empIdx" (mouseleave)="dayClass = null"
-            (contextmenu)="onRightClick($event, dayIdx, empIdx)"
+            (contextmenu)="onRightClick($event, dayIdx, empIdx); createEmployeeForm(dayIdx, empIdx)"
             (mousedown)="mouseDown(dayIdx, empIdx, cell.className, $event)" (mousemove)="mouseMove(dayIdx, empIdx)"
             [classList]="minDayIdx <= cell.id.split('-')[0] && cell.id.split('-')[0] <= maxDayIdx && minEmpIdx <= cell.id.split('-')[1] && cell.id.split('-')[1] <= maxEmpIdx
             ? 'selected-field' : 'unselected-field'">
@@ -29,7 +29,7 @@
 </div>
 <div oncontextmenu="return false;" *ngIf="contextMenu" >
   <div>
-    <app-context-menu (contextMenuBool)="disableContextMenu()" [x]="x" [y]="y">
+    <app-context-menu (contextMenuBool)="disableContextMenu()" [x]="x" [y]="y" [employeeForm]="employeeForm">
     </app-context-menu>
   </div>
 </div>
